@@ -1,0 +1,17 @@
+# Set working directory
+setwd("C:/Users/Sean/Desktop/Projects/R Statistical Language/Titanic")
+
+# Imported datasets "test.csv" and "train.csv" into RStudio
+train <- read.csv("train.csv")
+test <- read.csv("test.csv")
+
+# Examined structures of dataframes
+str(train)
+str(test)
+
+# Looked at number of people who survived
+table(train$Survived)
+prop.table(table(train$Survived))
+
+# Created new column in test set with our prediction that everyone dies in test
+test$Survived <- rep(0, 418)
