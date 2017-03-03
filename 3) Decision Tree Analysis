@@ -1,0 +1,44 @@
+# Set working directory
+setwd("C:/Users/Sean/Desktop/Projects/R Statistical Language/Titanic")
+
+# Imported datasets "test.csv" and "train.csv" into RStudio
+train <- read.csv("train.csv")
+test <- read.csv("test.csv")
+
+# Installed and load required packages for fancy decision tree plotting
+install.packages('rattle')
+install.packages('rpart.plot')
+install.packages('RColorBrewer')
+library(rpart)
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+
+# Recreated the gender model
+fit <- rpart(Survived ~ Sex, data=train, method="class")
+fancyRpartPlot(fit)
+
+# Built a deeper tree
+fit <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train, method="class")
+# Plotted with base-R
+plot(fit)
+text(fit)
+# Used fancyRpartPlot to improve appearance
+fancyRpartPlot(fit)
+
+# Made a prediction
+Prediction <- predict(fit, test, type = "class")
+
+# Grew decision tree to max
+fit <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train,
+             method="class", control=rpart.control(minsplit=2, cp=0))
+fancyRpartPlot(fit)
+
+# Made a prediction
+Prediction <- predict(fit, test, type = "class")
+
+# Manually trimmed the decision tree
+fit <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train,
+             method="class", control=rpart.control(minsplit=2, cp=0.005))
+new.fit <- prp(fit,snip=TRUE)$obj
+fancyRpartPlot(new.fit)
